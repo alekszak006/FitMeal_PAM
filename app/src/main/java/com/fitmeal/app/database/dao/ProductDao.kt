@@ -1,11 +1,11 @@
 package com.fitmeal.app.database.dao
 
-import kotlin.collections.List
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.fitmeal.app.database.entites.Product
+
 
 @Dao
 interface ProductDao {

@@ -1,5 +1,6 @@
 package com.fitmeal.app
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,14 +8,31 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.fitmeal.app.R
+import androidx.room.Room
 import com.fitmeal.app.database.AppDatabase
 import com.fitmeal.app.database.entites.Product
+import com.fitmeal.app.databinding.FragmentAddProductBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.fitmeal.app.databinding.FragmentAddProductBinding
+
 
 class AddProductFragment : Fragment() {
+
+    companion object {
+        @Volatile
+        private var instance: AppDatabase? = null
+
+        @JvmStatic
+        fun getDatabase(context: Context): AppDatabase {
+            return instance ?: synchronized(this) {
+                instance ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "fitmeal_db"
+                ).build().also { instance = it }
+            }
+        }
+    }
 
     private var _binding: FragmentAddProductBinding? = null
     private val binding get() = _binding!!
@@ -44,7 +62,11 @@ class AddProductFragment : Fragment() {
             )
 
             lifecycleScope.launch(Dispatchers.IO) {
-                AppDatabase.getInstance(requireContext()).productDao().insert(product)
+                val db = AppDatabase.getDatabase(requireContext())
+
+                // 💥 tutaj był problem: brakowało tej linii
+                db.productDao().insert(product)
+
                 launch(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Dodano produkt!", Toast.LENGTH_SHORT).show()
                 }
@@ -57,4 +79,3 @@ class AddProductFragment : Fragment() {
         _binding = null
     }
 }
-

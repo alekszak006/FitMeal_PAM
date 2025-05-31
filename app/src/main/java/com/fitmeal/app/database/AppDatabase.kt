@@ -8,15 +8,17 @@ import com.fitmeal.app.database.dao.ProductDao
 import com.fitmeal.app.database.entites.Product
 
 @Database(entities = [Product::class], version = 1)
-abstract class AppDatabase : RoomDatabase(){
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun productDao(): ProductDao
 
     companion object {
-        @Volatile private var instance: AppDatabase? = null
+        @Volatile
+        private var instance: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase{
-            return instance ?: synchronized(this){
+        @JvmStatic
+        fun getDatabase(context: Context): AppDatabase {
+            return instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,

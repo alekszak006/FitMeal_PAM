@@ -15,6 +15,11 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container, AddProductFragment())
                 .commit()
         }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, MainMenuFragment())
+                .commit();
+        }
     }
 }
 
