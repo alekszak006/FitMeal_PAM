@@ -16,6 +16,10 @@ class MealPlanFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MealPlanAdapter
     private lateinit var textTotalCalories: TextView
+    private lateinit var textTotalProtein: TextView
+    private lateinit var textTotalFat: TextView
+    private lateinit var textTotalCarbs: TextView
+
     private val selectedProducts = mutableListOf<Product>()
 
     override fun onCreateView(
@@ -23,12 +27,16 @@ class MealPlanFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_meal_plan, container, false)
+
         recyclerView = view.findViewById(R.id.recyclerViewMealPlan)
         textTotalCalories = view.findViewById(R.id.textTotalCalories)
+        textTotalProtein = view.findViewById(R.id.textTotalProtein)
+        textTotalFat = view.findViewById(R.id.textTotalFat)
+        textTotalCarbs = view.findViewById(R.id.textTotalCarbs)
 
         adapter = MealPlanAdapter { product ->
             selectedProducts.add(product)
-            updateTotalCalories()
+            updateSummary()
         }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -49,8 +57,15 @@ class MealPlanFragment : Fragment() {
         }
     }
 
-    private fun updateTotalCalories() {
-        val total = selectedProducts.sumOf { it.calories }
-        textTotalCalories.text = "Łącznie kcal: $total"
+    private fun updateSummary() {
+        val totalCalories = selectedProducts.sumOf { it.calories }
+        val totalProtein = selectedProducts.sumOf { it.protein }
+        val totalFat = selectedProducts.sumOf { it.fat }
+        val totalCarbs = selectedProducts.sumOf { it.carbs }
+
+        textTotalCalories.text = "Łącznie kcal: $totalCalories"
+        textTotalProtein.text = "Białko: %.1fg".format(totalProtein)
+        textTotalFat.text = "Tłuszcze: %.1fg".format(totalFat)
+        textTotalCarbs.text = "Węglowodany: %.1fg".format(totalCarbs)
     }
 }
