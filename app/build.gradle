@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.fitmeal.app'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.fitmeal.app"
@@ -33,7 +33,7 @@ android {
         jvmTarget = '11'
     }
     buildFeatures {
-        compose true
+        viewBinding true
     }
 }
 
@@ -49,14 +49,13 @@ dependencies {
     implementation libs.androidx.material3
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation "androidx.room:room-ktx:2.5.1"
     kapt("androidx.room:room-compiler:2.6.1")
 
 // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-// MPAndroidChart (opcjonalnie, jeśli chcesz wykresy)
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 // Material Design 3 jest już, ale możesz dodać 2-kę jeśli chcesz klasyczne komponenty
     implementation("com.google.android.material:material:1.11.0")
